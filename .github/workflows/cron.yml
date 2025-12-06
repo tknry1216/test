@@ -1,0 +1,45 @@
+name: Scheduled PR Creation
+
+on:
+  schedule:
+    # 毎日午前9時（日本時間）に実行 = UTC 0:00
+    - cron: '0 0 * * *'
+  # 手動実行も可能
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Make changes
+        run: |
+          # 例: 最終更新日時をファイルに記録
+          echo "Last updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > LAST_UPDATED.txt
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update timestamp"
+          branch: auto-update/timestamp
+          delete-branch: true
+          title: "🤖 Scheduled Update"
+          body: |
+            ## 自動更新
+            
+            このPRはGitHub Actionsのcron jobによって自動作成されました。
+            
+            - 実行日時: ${{ github.event.repository.updated_at }}
+            - ワークフロー: ${{ github.workflow }}
+          labels: |
+            automated
+            bot
+
