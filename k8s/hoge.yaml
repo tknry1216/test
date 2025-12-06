@@ -53,7 +53,7 @@ spec:
             - name: ENABLE_EVENT_TRACKING
               value: "true"
             - name: IS_PREPARING_BILLING_MODE
-              value: "false"
+              value: "true"
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
