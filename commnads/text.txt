@@ -1,0 +1,48 @@
+# minikube
+- minikube ノードのポートを確認するコマンド
+```bash
+docker inspect --format '{{ json .NetworkSettings.Ports }}' minikube | jq
+```
+
+```json
+{
+  "22/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50153"
+    }
+  ],
+  "2376/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50154"
+    }
+  ],
+  "32443/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50155"
+    }
+  ],
+  "5000/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50156"
+    }
+  ],
+  "8443/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50157"
+    }
+  ]
+}
+```
+
+# minikube の Docker 環境を設定するコマンド
+```bash
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://127.0.0.1:50154"
+export DOCKER_CERT_PATH="$HOME/.minikube/certs"
+export MINIKUBE_ACTIVE_DOCKERD="minikube"
+```
