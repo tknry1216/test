@@ -46,3 +46,32 @@ export DOCKER_HOST="tcp://127.0.0.1:50154"
 export DOCKER_CERT_PATH="$HOME/.minikube/certs"
 export MINIKUBE_ACTIVE_DOCKERD="minikube"
 ```
+
+```
+kubectl exec -ti sample-pod -c curl-container -- curl localhost:5000
+```
+
+```
+kubectl exec -ti sample-pod -c curl-container -- ip address
+```
+
+```bash
+diff <(kubectl exec -ti sample-pod -c curl-container -- ip address) <(kubectl exec -ti sample-pod -c api-container -- ip address)
+```
+
+```
+docker inspect k8s_curl-container_sample-pod_default_b92da585-2b3b-4e58-a597-eb8dd52da4fa_0 --format '{{ .State.Pid }}'
+11850
+```
+
+```
+docker inspect k8s_api-container_sample-pod_default_b92da585-2b3b-4e58-a597-eb8dd52da4fa_0 --format '{{ .State.Pid }}'
+11806
+```
+
+```
+sudo ls -la /proc/11806/ns/net
+```
+
+
+kubectl exec -ti sample-daemonset-kl2rf -- curl 10.244.2.2:5000
