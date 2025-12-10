@@ -74,4 +74,13 @@ sudo ls -la /proc/11806/ns/net
 ```
 
 
-kubectl exec -ti sample-daemonset-kl2rf -- curl 10.244.2.2:5000
+kubectl exec -ti sample-daemonset-kl2rf -- curl 10.244.2.2:5000\
+
+
+
+kubectl exec -ti curl-replicaset-qnh2w -- curl 10.110.220.44:5555
+
+kubectl exec -ti curl-replicaset-qnh2w -- curl clusterip-svc.default.svc.cluster.local:5555
+
+ssh dockera127.0.0.1 -N -p Sdocker inspect --format=Cindex index. .NetworkSettings.Ports E
+"22/tcp") 0). HostPort}) minikube) -i $(minikube ssh-key) -L 8080:192.168.49.2:8080
