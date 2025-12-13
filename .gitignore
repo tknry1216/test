@@ -1,0 +1,56 @@
+# Binaries and builds
+bin/
+build/
+dist/
+
+# Go artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.*
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Env files
+.env
+env.local
+
+# Vendor (if ever used)
+vendor/
+
+# Binaries and builds
+bin/
+build/
+dist/
+
+# Go artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.*
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Env files
+.env
+
+# Vendor (if ever used)
+vendor/
+
+
