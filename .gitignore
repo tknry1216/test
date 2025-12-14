@@ -25,3 +25,7 @@ env.local
 
 # Vendor (if ever used)
 vendor/
+
+# Go workspace (local development)
+go.work
+go.work.sum
