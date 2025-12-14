@@ -1,0 +1,65 @@
+tenants
+- id
+- name
+
+accounts
+- id 
+- external_account_id(e.g. org_account_id) // unique with tenant
+- tenant_id
+
+// プランや提供するサービスのカタログ
+catalogs
+- id
+- name
+- tenant_id
+
+catalog_prices
+- id
+- catalog_id
+- amount
+- billing_type(enum: ONE_SHOT, RECURRING)
+- billing_cycle(nullable) // MONTHLY etc
+- start_date
+- end_date
+
+// サブスクリプション
+subscriptions
+- id
+- account_id
+- catalog_id
+- start_date
+- end_date
+- idempotency_key
+- next_billing_date
+
+// ワンショット課金
+one_shot_usages
+- id
+- account_id
+- catalog_id
+- idempotency_key
+- used_at
+
+// 請求が確定したタイミングで作られる
+service_charges
+- id
+- account_id
+- start_date
+- end_date
+- amount
+- latest_status_id
+
+service_charge_items
+- id
+- name
+- amount
+- service_charge_id
+- one_shot_usage_id(nullable)
+- subscription_id(nullable)
+
+// 請求のステータス。履歴的に持ちたい。
+service_charge_statuses
+- id
+- name
+- status(enum: [RESERVED, COMPLETED, FAILED, CANCELLED])
+- service_charge_id
