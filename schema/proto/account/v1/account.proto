@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package account.v1;
+
+option go_package = "github.com/flora/pkg/pb/account/v1;accountv1";
+
+service AccountService {
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
+}
+
+message CreateAccountRequest {
+  string external_account_id = 1;
+}
+
+message CreateAccountResponse {
+  Account account = 1;
+}
+
+message Account {
+  string id = 1;
+  string external_account_id = 2;
+  string tenant_id = 3;
+}
+

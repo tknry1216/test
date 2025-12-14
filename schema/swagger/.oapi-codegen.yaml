@@ -1,0 +1,9 @@
+package: swagger
+generate:
+  models: true
+  chi-server: true
+  strict-server: false
+output: pkg/swagger/server.gen.go
+output-options:
+  skip-prune: true
+

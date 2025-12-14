@@ -1,0 +1,16 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/flora/pkg/pb
+plugins:
+  - remote: buf.build/protocolbuffers/go
+    out: ../pkg/pb
+    opt:
+      - paths=source_relative
+  - remote: buf.build/grpc/go
+    out: ../pkg/pb
+    opt:
+      - paths=source_relative
+

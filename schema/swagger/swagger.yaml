@@ -1,0 +1,180 @@
+openapi: 3.0.3
+info:
+  title: Flora Ops API
+  description: Operations API for managing tenants and system resources
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/ops/v1
+    description: Local development server
+
+paths:
+  /tenants:
+    post:
+      summary: Create a new tenant
+      operationId: createTenant
+      tags:
+        - Tenants
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTenantRequest"
+      responses:
+        "201":
+          description: Tenant created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateTenantResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    get:
+      summary: List all tenants
+      operationId: listTenants
+      tags:
+        - Tenants
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: List of tenants
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListTenantsResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /tenants/{tenant_id}:
+    get:
+      summary: Get tenant by ID
+      operationId: getTenant
+      tags:
+        - Tenants
+      parameters:
+        - name: tenant_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Tenant details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+        "404":
+          description: Tenant not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    CreateTenantRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Tenant name
+          example: "Acme Corporation"
+
+    CreateTenantResponse:
+      type: object
+      properties:
+        tenant:
+          $ref: "#/components/schemas/Tenant"
+
+    ListTenantsResponse:
+      type: object
+      properties:
+        tenants:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tenant"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+
+    Tenant:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Tenant ID
+          example: "tenant_123"
+        name:
+          type: string
+          description: Tenant name
+          example: "Acme Corporation"
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 100
+        total_pages:
+          type: integer
+          example: 5
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: "invalid_request"
+        message:
+          type: string
+          description: Error message
+          example: "Invalid request parameters"
