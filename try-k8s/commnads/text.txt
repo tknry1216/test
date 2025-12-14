@@ -1,0 +1,86 @@
+# minikube
+- minikube ノードのポートを確認するコマンド
+```bash
+docker inspect --format '{{ json .NetworkSettings.Ports }}' minikube | jq
+```
+
+```json
+{
+  "22/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50153"
+    }
+  ],
+  "2376/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50154"
+    }
+  ],
+  "32443/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50155"
+    }
+  ],
+  "5000/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50156"
+    }
+  ],
+  "8443/tcp": [
+    {
+      "HostIp": "127.0.0.1",
+      "HostPort": "50157"
+    }
+  ]
+}
+```
+
+# minikube の Docker 環境を設定するコマンド
+```bash
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://127.0.0.1:50154"
+export DOCKER_CERT_PATH="$HOME/.minikube/certs"
+export MINIKUBE_ACTIVE_DOCKERD="minikube"
+```
+
+```
+kubectl exec -ti sample-pod -c curl-container -- curl localhost:5000
+```
+
+```
+kubectl exec -ti sample-pod -c curl-container -- ip address
+```
+
+```bash
+diff <(kubectl exec -ti sample-pod -c curl-container -- ip address) <(kubectl exec -ti sample-pod -c api-container -- ip address)
+```
+
+```
+docker inspect k8s_curl-container_sample-pod_default_b92da585-2b3b-4e58-a597-eb8dd52da4fa_0 --format '{{ .State.Pid }}'
+11850
+```
+
+```
+docker inspect k8s_api-container_sample-pod_default_b92da585-2b3b-4e58-a597-eb8dd52da4fa_0 --format '{{ .State.Pid }}'
+11806
+```
+
+```
+sudo ls -la /proc/11806/ns/net
+```
+
+
+kubectl exec -ti sample-daemonset-kl2rf -- curl 10.244.2.2:5000\
+
+
+
+kubectl exec -ti curl-replicaset-qnh2w -- curl 10.110.220.44:5555
+
+kubectl exec -ti curl-replicaset-qnh2w -- curl clusterip-svc.default.svc.cluster.local:5555
+
+ssh dockera127.0.0.1 -N -p Sdocker inspect --format=Cindex index. .NetworkSettings.Ports E
+"22/tcp") 0). HostPort}) minikube) -i $(minikube ssh-key) -L 8080:192.168.49.2:8080
