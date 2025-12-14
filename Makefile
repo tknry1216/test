@@ -11,6 +11,8 @@ proto:
 .PHONY: mock
 mock:
 	cd pkg/pb/account/v1 && go generate
+	cd pkg/pb/subscription/v1 && go generate
+	cd pkg/pb/servicecharge/v1 && go generate
 
 .PHONY: tidy
 tidy:
