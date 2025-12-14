@@ -1,2 +1,64 @@
-// ReserveServiceCharge
-// UpdateServiceChargeStatus
+syntax = "proto3";
+
+package servicecharge.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/flora/pkg/pb/servicecharge/v1;servicechargev1";
+
+service ServiceChargeService {
+  rpc ReserveServiceCharge(ReserveServiceChargeRequest) returns (ReserveServiceChargeResponse);
+  rpc UpdateServiceChargeStatus(UpdateServiceChargeStatusRequest) returns (UpdateServiceChargeStatusResponse);
+}
+
+message ReserveServiceChargeRequest {
+  string account_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  repeated ServiceChargeItem items = 4;
+}
+
+message ReserveServiceChargeResponse {
+  ServiceCharge service_charge = 1;
+}
+
+message UpdateServiceChargeStatusRequest {
+  string service_charge_id = 1;
+  ServiceChargeStatus status = 2;
+}
+
+message UpdateServiceChargeStatusResponse {
+  ServiceCharge service_charge = 1;
+}
+
+message ServiceCharge {
+  string id = 1;
+  string account_id = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  repeated ServiceChargeItem items = 5;
+  ServiceChargeStatus latest_status = 6;
+}
+
+message ServiceChargeItem {
+  string id = 1;
+  string name = 2;
+  int64 amount = 3;
+  ServiceChargeSource source = 4;
+}
+
+message ServiceChargeSource {
+  oneof source {
+    string one_shot_usage_id = 1;
+    string subscription_id = 2;
+    string manual_reason = 3;
+  }
+}
+
+enum ServiceChargeStatus {
+  SERVICE_CHARGE_STATUS_UNSPECIFIED = 0;
+  SERVICE_CHARGE_STATUS_RESERVED = 1;
+  SERVICE_CHARGE_STATUS_COMPLETED = 2;
+  SERVICE_CHARGE_STATUS_FAILED = 3;
+  SERVICE_CHARGE_STATUS_CANCELLED = 4;
+}

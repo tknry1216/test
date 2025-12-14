@@ -13,7 +13,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	v1 "github.com/flora/pkg/pb/account/v1"
+	accountv1 "github.com/flora/pkg/pb/account/v1"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -42,10 +42,10 @@ func (m *MockAccountServiceServer) EXPECT() *MockAccountServiceServerMockRecorde
 }
 
 // CreateAccount mocks base method.
-func (m *MockAccountServiceServer) CreateAccount(arg0 context.Context, arg1 *v1.CreateAccountRequest) (*v1.CreateAccountResponse, error) {
+func (m *MockAccountServiceServer) CreateAccount(arg0 context.Context, arg1 *accountv1.CreateAccountRequest) (*accountv1.CreateAccountResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateAccount", arg0, arg1)
-	ret0, _ := ret[0].(*v1.CreateAccountResponse)
+	ret0, _ := ret[0].(*accountv1.CreateAccountResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
