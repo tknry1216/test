@@ -4,9 +4,16 @@ APP_NAME := servicechargeservice
 PKG := ./...
 ENTRY := ./cmd/$(APP_NAME)
 
+.PHONY: gen
+gen: proto swagger
+
 .PHONY: proto
 proto:
 	cd schema && buf generate
+
+.PHONY: swagger
+swagger:
+	cd /Users/takenariyamamoto/test && oapi-codegen -config schema/swagger/.oapi-codegen.yaml schema/swagger/swagger.yaml
 
 .PHONY: mock
 mock:
