@@ -4,6 +4,10 @@ APP_NAME := servicechargeservice
 PKG := ./...
 ENTRY := ./cmd/$(APP_NAME)
 
+.PHONY: proto
+proto:
+	cd schema && buf generate
+
 .PHONY: tidy
 tidy:
 	go mod tidy
