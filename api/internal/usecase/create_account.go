@@ -1,4 +1,4 @@
-package accountusecase
+package usecase
 
 type createAccountUsecase struct {
 }

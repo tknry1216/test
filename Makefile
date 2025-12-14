@@ -8,9 +8,16 @@ ENTRY := ./cmd/$(APP_NAME)
 proto:
 	cd schema && buf generate
 
+.PHONY: mock
+mock:
+	cd pkg/pb/account/v1 && go generate
+
 .PHONY: tidy
 tidy:
-	go mod tidy
+	cd api && go mod tidy
+	cd job && go mod tidy
+	cd subscriber && go mod tidy
+	cd pkg/pb && go mod tidy
 
 .PHONY: build
 build:
