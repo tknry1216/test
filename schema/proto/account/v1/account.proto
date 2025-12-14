@@ -10,7 +10,6 @@ service AccountService {
 
 message CreateAccountRequest {
   string external_account_id = 1;
-  string tenant_id = 2;
 }
 
 message CreateAccountResponse {

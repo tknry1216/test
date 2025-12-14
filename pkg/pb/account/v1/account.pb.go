@@ -24,7 +24,6 @@ const (
 type CreateAccountRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	ExternalAccountId string                 `protobuf:"bytes,1,opt,name=external_account_id,json=externalAccountId,proto3" json:"external_account_id,omitempty"`
-	TenantId          string                 `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -62,13 +61,6 @@ func (*CreateAccountRequest) Descriptor() ([]byte, []int) {
 func (x *CreateAccountRequest) GetExternalAccountId() string {
 	if x != nil {
 		return x.ExternalAccountId
-	}
-	return ""
-}
-
-func (x *CreateAccountRequest) GetTenantId() string {
-	if x != nil {
-		return x.TenantId
 	}
 	return ""
 }
@@ -182,10 +174,9 @@ var File_account_v1_account_proto protoreflect.FileDescriptor
 const file_account_v1_account_proto_rawDesc = "" +
 	"\n" +
 	"\x18account/v1/account.proto\x12\n" +
-	"account.v1\"c\n" +
+	"account.v1\"F\n" +
 	"\x14CreateAccountRequest\x12.\n" +
-	"\x13external_account_id\x18\x01 \x01(\tR\x11externalAccountId\x12\x1b\n" +
-	"\ttenant_id\x18\x02 \x01(\tR\btenantId\"F\n" +
+	"\x13external_account_id\x18\x01 \x01(\tR\x11externalAccountId\"F\n" +
 	"\x15CreateAccountResponse\x12-\n" +
 	"\aaccount\x18\x01 \x01(\v2\x13.account.v1.AccountR\aaccount\"f\n" +
 	"\aAccount\x12\x0e\n" +

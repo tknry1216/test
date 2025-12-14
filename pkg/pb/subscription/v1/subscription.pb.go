@@ -28,8 +28,7 @@ type CreateSubscriptionRequest struct {
 	CatalogId       string                 `protobuf:"bytes,2,opt,name=catalog_id,json=catalogId,proto3" json:"catalog_id,omitempty"`
 	StartDate       *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
 	EndDate         *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
-	IdempotencyKey  string                 `protobuf:"bytes,5,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
-	NextBillingDate *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=next_billing_date,json=nextBillingDate,proto3" json:"next_billing_date,omitempty"`
+	NextBillingDate *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=next_billing_date,json=nextBillingDate,proto3" json:"next_billing_date,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -92,13 +91,6 @@ func (x *CreateSubscriptionRequest) GetEndDate() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *CreateSubscriptionRequest) GetIdempotencyKey() string {
-	if x != nil {
-		return x.IdempotencyKey
-	}
-	return ""
-}
-
 func (x *CreateSubscriptionRequest) GetNextBillingDate() *timestamppb.Timestamp {
 	if x != nil {
 		return x.NextBillingDate
@@ -157,8 +149,7 @@ type Subscription struct {
 	CatalogId       string                 `protobuf:"bytes,3,opt,name=catalog_id,json=catalogId,proto3" json:"catalog_id,omitempty"`
 	StartDate       *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
 	EndDate         *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
-	IdempotencyKey  string                 `protobuf:"bytes,6,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
-	NextBillingDate *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=next_billing_date,json=nextBillingDate,proto3" json:"next_billing_date,omitempty"`
+	NextBillingDate *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=next_billing_date,json=nextBillingDate,proto3" json:"next_billing_date,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -228,13 +219,6 @@ func (x *Subscription) GetEndDate() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *Subscription) GetIdempotencyKey() string {
-	if x != nil {
-		return x.IdempotencyKey
-	}
-	return ""
-}
-
 func (x *Subscription) GetNextBillingDate() *timestamppb.Timestamp {
 	if x != nil {
 		return x.NextBillingDate
@@ -246,7 +230,7 @@ var File_subscription_v1_subscription_proto protoreflect.FileDescriptor
 
 const file_subscription_v1_subscription_proto_rawDesc = "" +
 	"\n" +
-	"\"subscription/v1/subscription.proto\x12\x0fsubscription.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbc\x02\n" +
+	"\"subscription/v1/subscription.proto\x12\x0fsubscription.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x93\x02\n" +
 	"\x19CreateSubscriptionRequest\x12\x1d\n" +
 	"\n" +
 	"account_id\x18\x01 \x01(\tR\taccountId\x12\x1d\n" +
@@ -254,11 +238,10 @@ const file_subscription_v1_subscription_proto_rawDesc = "" +
 	"catalog_id\x18\x02 \x01(\tR\tcatalogId\x129\n" +
 	"\n" +
 	"start_date\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tstartDate\x125\n" +
-	"\bend_date\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\aendDate\x12'\n" +
-	"\x0fidempotency_key\x18\x05 \x01(\tR\x0eidempotencyKey\x12F\n" +
-	"\x11next_billing_date\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0fnextBillingDate\"_\n" +
+	"\bend_date\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\aendDate\x12F\n" +
+	"\x11next_billing_date\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x0fnextBillingDate\"_\n" +
 	"\x1aCreateSubscriptionResponse\x12A\n" +
-	"\fsubscription\x18\x01 \x01(\v2\x1d.subscription.v1.SubscriptionR\fsubscription\"\xbf\x02\n" +
+	"\fsubscription\x18\x01 \x01(\v2\x1d.subscription.v1.SubscriptionR\fsubscription\"\x96\x02\n" +
 	"\fSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -267,9 +250,8 @@ const file_subscription_v1_subscription_proto_rawDesc = "" +
 	"catalog_id\x18\x03 \x01(\tR\tcatalogId\x129\n" +
 	"\n" +
 	"start_date\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tstartDate\x125\n" +
-	"\bend_date\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\aendDate\x12'\n" +
-	"\x0fidempotency_key\x18\x06 \x01(\tR\x0eidempotencyKey\x12F\n" +
-	"\x11next_billing_date\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x0fnextBillingDate2\x84\x01\n" +
+	"\bend_date\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\aendDate\x12F\n" +
+	"\x11next_billing_date\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0fnextBillingDate2\x84\x01\n" +
 	"\x13SubscriptionService\x12m\n" +
 	"\x12CreateSubscription\x12*.subscription.v1.CreateSubscriptionRequest\x1a+.subscription.v1.CreateSubscriptionResponseB\xbd\x01\n" +
 	"\x13com.subscription.v1B\x11SubscriptionProtoP\x01Z6github.com/flora/pkg/pb/subscription/v1;subscriptionv1\xa2\x02\x03SXX\xaa\x02\x0fSubscription.V1\xca\x02\x0fSubscription\\V1\xe2\x02\x1bSubscription\\V1\\GPBMetadata\xea\x02\x10Subscription::V1b\x06proto3"
