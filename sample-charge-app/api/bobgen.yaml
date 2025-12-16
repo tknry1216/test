@@ -1,0 +1,38 @@
+plugins_preset: default
+
+# 出力先を api 配下にまとめる
+plugins:
+  models:
+    destination: internal/bob/models
+    pkgname: models
+  enums:
+    destination: internal/bob/enums
+    pkgname: enums
+  factory:
+    destination: internal/bob/factory
+    pkgname: factory
+  dbinfo:
+    destination: internal/bob/dbinfo
+    pkgname: dbinfo
+  dberrors:
+    destination: internal/bob/dberrors
+    pkgname: dberrors
+  where:
+    disabled: true
+  loaders:
+    disabled: true
+  joins:
+    disabled: true
+
+# 共通設定
+type_system: database/sql
+tags: ["json", "db"]
+
+mysql:
+  dsn: "sample:sample@tcp(localhost:3306)/sample_charge?parseTime=true"
+  # テーブルの include/exclude。空なら全テーブル対象。
+  only: {}
+  except: {}
+  queries: []
+  concurrency: 10
+

@@ -39,6 +39,10 @@ migrate-force:
 		-v $(PWD)/$(MIGRATIONS_DIR):/migrations \
 		$(MIGRATE_IMAGE) \
 		-path=/migrations -database $(DB_URL) force $$ver
+
+.PHONY: bob-gen
+bob-gen:
+	cd api && go run github.com/stephenafamo/bob/gen/bobgen-mysql@latest --config bobgen.yaml
 SHELL := /bin/sh
 
 APP_NAME := servicechargeservice
