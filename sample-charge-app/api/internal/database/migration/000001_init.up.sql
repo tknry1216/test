@@ -1,116 +1,111 @@
 -- Create tenants table
 CREATE TABLE IF NOT EXISTS tenants (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
 -- Create accounts table
 CREATE TABLE IF NOT EXISTS accounts (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     external_account_id VARCHAR(255) NOT NULL,
-    tenant_id BIGINT NOT NULL,
+    tenant_id BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_accounts_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id),
     CONSTRAINT uq_accounts_external_tenant UNIQUE (external_account_id, tenant_id)
-);
+) ENGINE=InnoDB;
 
 -- Create catalogs table
 CREATE TABLE IF NOT EXISTS catalogs (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    tenant_id BIGINT NOT NULL,
+    tenant_id BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_catalogs_tenant FOREIGN KEY (tenant_id) REFERENCES tenants(id)
-);
+) ENGINE=InnoDB;
 
 -- Create catalog_prices table
-CREATE TYPE billing_type AS ENUM ('ONE_SHOT', 'RECURRING');
-CREATE TYPE billing_cycle AS ENUM ('MONTHLY', 'YEARLY', 'QUARTERLY');
-
 CREATE TABLE IF NOT EXISTS catalog_prices (
-    id BIGSERIAL PRIMARY KEY,
-    catalog_id BIGINT NOT NULL,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    catalog_id BIGINT UNSIGNED NOT NULL,
     amount BIGINT NOT NULL,
-    billing_type billing_type NOT NULL,
-    billing_cycle billing_cycle,
+    billing_type ENUM('ONE_SHOT','RECURRING') NOT NULL,
+    billing_cycle ENUM('MONTHLY','YEARLY','QUARTERLY'),
     start_date DATE NOT NULL,
     end_date DATE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_catalog_prices_catalog FOREIGN KEY (catalog_id) REFERENCES catalogs(id)
-);
+) ENGINE=InnoDB;
 
 -- Create subscriptions table
 CREATE TABLE IF NOT EXISTS subscriptions (
-    id BIGSERIAL PRIMARY KEY,
-    account_id BIGINT NOT NULL,
-    catalog_id BIGINT NOT NULL,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    account_id BIGINT UNSIGNED NOT NULL,
+    catalog_id BIGINT UNSIGNED NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE,
     idempotency_key VARCHAR(255) NOT NULL UNIQUE,
     next_billing_date DATE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_subscriptions_account FOREIGN KEY (account_id) REFERENCES accounts(id),
     CONSTRAINT fk_subscriptions_catalog FOREIGN KEY (catalog_id) REFERENCES catalogs(id)
-);
+) ENGINE=InnoDB;
 
 -- Create one_shot_usages table
 CREATE TABLE IF NOT EXISTS one_shot_usages (
-    id BIGSERIAL PRIMARY KEY,
-    account_id BIGINT NOT NULL,
-    catalog_id BIGINT NOT NULL,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    account_id BIGINT UNSIGNED NOT NULL,
+    catalog_id BIGINT UNSIGNED NOT NULL,
     idempotency_key VARCHAR(255) NOT NULL UNIQUE,
     used_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_one_shot_usages_account FOREIGN KEY (account_id) REFERENCES accounts(id),
     CONSTRAINT fk_one_shot_usages_catalog FOREIGN KEY (catalog_id) REFERENCES catalogs(id)
-);
+) ENGINE=InnoDB;
 
 -- Create service_charges table
 CREATE TABLE IF NOT EXISTS service_charges (
-    id BIGSERIAL PRIMARY KEY,
-    account_id BIGINT NOT NULL,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    account_id BIGINT UNSIGNED NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     amount BIGINT NOT NULL,
-    latest_status_id BIGINT,
+    latest_status_id BIGINT UNSIGNED,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_service_charges_account FOREIGN KEY (account_id) REFERENCES accounts(id)
-);
+) ENGINE=InnoDB;
 
 -- Create service_charge_items table
 CREATE TABLE IF NOT EXISTS service_charge_items (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     amount BIGINT NOT NULL,
-    service_charge_id BIGINT NOT NULL,
-    one_shot_usage_id BIGINT,
-    subscription_id BIGINT,
+    service_charge_id BIGINT UNSIGNED NOT NULL,
+    one_shot_usage_id BIGINT UNSIGNED,
+    subscription_id BIGINT UNSIGNED,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_service_charge_items_charge FOREIGN KEY (service_charge_id) REFERENCES service_charges(id),
     CONSTRAINT fk_service_charge_items_one_shot FOREIGN KEY (one_shot_usage_id) REFERENCES one_shot_usages(id),
     CONSTRAINT fk_service_charge_items_subscription FOREIGN KEY (subscription_id) REFERENCES subscriptions(id)
-);
+) ENGINE=InnoDB;
 
 -- Create service_charge_statuses table
-CREATE TYPE service_charge_status AS ENUM ('RESERVED', 'COMPLETED', 'FAILED', 'CANCELLED');
-
 CREATE TABLE IF NOT EXISTS service_charge_statuses (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    status service_charge_status NOT NULL,
-    service_charge_id BIGINT NOT NULL,
+    status ENUM('RESERVED','COMPLETED','FAILED','CANCELLED') NOT NULL,
+    service_charge_id BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_service_charge_statuses_charge FOREIGN KEY (service_charge_id) REFERENCES service_charges(id)
-);
+) ENGINE=InnoDB;
 
 -- Add foreign key constraint for latest_status_id after service_charge_statuses table is created
 ALTER TABLE service_charges

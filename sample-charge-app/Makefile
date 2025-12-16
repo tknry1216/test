@@ -1,3 +1,44 @@
+PROJECT_NAME := sample-charge-app
+COMPOSE_FILE := docker-compose.yml
+MIGRATIONS_DIR := api/internal/database/migration
+DB_URL := "mysql://sample:sample@tcp(sample-charge-mysql:3306)/sample_charge?multiStatements=true"
+MIGRATE_IMAGE := migrate/migrate:latest
+
+.PHONY: up down logs ps migrate-up migrate-down migrate-force
+
+up:
+	docker compose -p $(PROJECT_NAME) -f $(COMPOSE_FILE) up -d
+
+down:
+	docker compose -p $(PROJECT_NAME) -f $(COMPOSE_FILE) down
+
+logs:
+	docker compose -p $(PROJECT_NAME) -f $(COMPOSE_FILE) logs -f
+
+ps:
+	docker compose -p $(PROJECT_NAME) -f $(COMPOSE_FILE) ps
+
+migrate-up:
+	docker run --rm \
+		--network $(PROJECT_NAME)_default \
+		-v $(PWD)/$(MIGRATIONS_DIR):/migrations \
+		$(MIGRATE_IMAGE) \
+		-path=/migrations -database $(DB_URL) up
+
+migrate-down:
+	docker run --rm \
+		--network $(PROJECT_NAME)_default \
+		-v $(PWD)/$(MIGRATIONS_DIR):/migrations \
+		$(MIGRATE_IMAGE) \
+		-path=/migrations -database $(DB_URL) down 1
+
+migrate-force:
+	@read -p "force version? " ver; \
+	docker run --rm \
+		--network $(PROJECT_NAME)_default \
+		-v $(PWD)/$(MIGRATIONS_DIR):/migrations \
+		$(MIGRATE_IMAGE) \
+		-path=/migrations -database $(DB_URL) force $$ver
 SHELL := /bin/sh
 
 APP_NAME := servicechargeservice

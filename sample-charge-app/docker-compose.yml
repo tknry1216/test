@@ -1,23 +1,19 @@
-services:
-  app:
-    build: .
-    image: servicechargeservice:latest
-    container_name: servicechargeservice
-    env_file:
-      - .env
-    ports:
-      - "${PORT:-8080}:${PORT:-8080}"
-    restart: unless-stopped
+version: "3.9"
 
 services:
-  app:
-    build: .
-    image: servicechargeservice:latest
-    container_name: servicechargeservice
-    env_file:
-      - env.sample
+  mysql:
+    image: mysql:8.0
+    container_name: sample-charge-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sample_charge
+      MYSQL_USER: sample
+      MYSQL_PASSWORD: sample
     ports:
-      - "${PORT:-8080}:${PORT:-8080}"
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     restart: unless-stopped
 
-
+volumes:
+  mysql_data:
