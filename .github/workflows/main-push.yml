@@ -3,12 +3,12 @@ name: Main Branch Push Workflow
 on:
   push:
     branches:
-      - main
+      - feat/fuga
 
 jobs:
   greeting:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # if条件を削除して攻撃を試みる
     steps:
       - name: Checkout
         uses: actions/checkout@v4
