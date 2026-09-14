@@ -1,0 +1,54 @@
+name: Test API Approval
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_id:
+        description: "Target ID"
+        required: true
+        default: "12345"
+
+      message:
+        description: "Message"
+        required: true
+        default: "Hello from GitHub Actions"
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show API request
+        run: |
+          echo "## API Request Preview" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Endpoint**" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`POST https://httpbin.org/post\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Target ID**" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`${{ inputs.target_id }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Body**" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          echo '{"id":"${{ inputs.target_id }}","message":"${{ inputs.message }}"}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+  call-api:
+    needs: preview
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: test-approval
+
+    steps:
+      - name: Call API
+        run: |
+          curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --request POST \
+            --header "Content-Type: application/json" \
+            --data '{"id":"${{ inputs.target_id }}","message":"${{ inputs.message }}"}' \
+            https://httpbin.org/post
